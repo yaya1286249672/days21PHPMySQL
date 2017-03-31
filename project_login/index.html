@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{margin:0;padding:0;}
+        #box{width:300px;height:300px;border:1px solid #eee;border-radius:5px;}
+        #title{width:300px;height:30px;background:#069;}
+        label{line-height:30px;}
+        input{width:230px;height:30px;display:block;}
+        #show{display:block;line-height:30px;}
+    </style>
+</head>
+<body>
+<h1>系统主页</h1>
+<div id="box">
+    <div id="title"></div>
+    <form action="">
+        <label for="uname">用户名</label><br/>
+        <input type="text" name="" id="uname"><br/>
+        <label for="psw">密码</label><br/>
+        <input type="text" name="" id="psw">
+    </form>
+    <button id="btn">登录</button>
+    <span id = "show"></span>
+</div>
+<script>
+
+    btn.onclick = function(){
+        var uname = document.getElementById("uname");
+        var psw = document.getElementById("psw");
+        var show = document.getElementById("show");
+        var http;
+        if(window.XMLHttpRequest){
+            http = new XMLHttpRequest();
+        }else{
+            http = new ActiveXObject("Microsoft.XMLHttp");
+        }
+        http.onreadystatechange = function(){
+            if(http.readyState == 4&&http.status == 200){
+                //var txt = http.responseText;
+                //show.textContent = txt;
+                console.log(http.responseText);
+                var json = JSON.parse(http.responseText);
+                console.log(json);
+                if(json.login == true){
+                    window.location.href = "login.html"
+                }else{
+                    show.textContent = json.msg;
+                }
+
+            }
+        }
+        http.open("POST","loginapp.php",true);
+        http.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        http.send("uname="+uname.value +"&psw="+psw.value);
+    }
+
+</script>
+</body>
+</html>
